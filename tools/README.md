@@ -6,6 +6,7 @@ This directory contains public-safe operational utilities.
 
 - `verify-readonly.mjs` — command-line wrapper around `src/session-store-analyzer.mjs`.
 - `generate-markdown-report.mjs` — converts a read-only analyzer result into a human-readable Markdown report.
+- `check-openclaw-version.mjs` — advisory GitHub release checker for upstream OpenClaw version drift.
 
 ## npm usage
 
@@ -13,6 +14,7 @@ From the repository root:
 
 ```bash
 npm run verify:mock
+npm run verify:mock:logged
 npm test
 npm run report:mock
 npm run check
@@ -34,6 +36,13 @@ Strict mode for automation:
 
 ```bash
 node tools/verify-readonly.mjs examples/mock-session-store --fail-on-warning
+```
+
+Structured logging:
+
+```bash
+node tools/verify-readonly.mjs examples/mock-session-store --log-file logs/stabilizer.log
+node tools/verify-readonly.mjs examples/mock-session-store --log-file logs/stabilizer.log --log-level debug
 ```
 
 Large-file-aware options:
@@ -58,10 +67,21 @@ The generated report includes:
 - safe next steps,
 - and explicit do-not-do warnings.
 
+## Advisory version check
+
+```bash
+node tools/check-openclaw-version.mjs --repo owner/OpenClaw --current 2026.6.8
+node tools/check-openclaw-version.mjs --repo owner/OpenClaw --current 2026.6.8 --log-file logs/stabilizer.log
+```
+
+This command only compares the supplied local version with the latest upstream GitHub release. It does not install, update, patch, or modify OpenClaw.
+
 ## Safety model
 
 The verifier is read-only. It prints a JSON report and exits with a non-zero status only when the report contains errors, or when strict warning mode is enabled.
 
 The report generator reads a fixture or session-store snapshot and writes a Markdown report to the output path supplied by the caller. It does not change source session data.
+
+The version checker is advisory only. It reports version drift and never changes the local runtime.
 
 The analyzer streams transcript files instead of loading full JSONL files into memory. Very large single JSONL lines can be skipped from deep validation while still being counted and reported.
