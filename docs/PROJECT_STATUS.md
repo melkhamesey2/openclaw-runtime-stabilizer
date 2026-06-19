@@ -2,9 +2,9 @@
 
 ## Current edition
 
-`v1.0.0` is the first complete public release of the OpenClaw Runtime Stabilizer artifact.
+`v1.1.0` is the current public release of the OpenClaw Runtime Stabilizer artifact.
 
-It combines public incident documentation, read-only verification tooling, mock fixtures, automated tests, large-file-aware JSONL inspection, Markdown report generation, npm automation, and CI validation.
+It combines public incident documentation, read-only verification tooling, mock fixtures, automated tests, large-file-aware JSONL inspection, structured JSONL logging, advisory upstream version checks, Markdown report generation, npm automation, and CI validation.
 
 ## Target runtime
 
@@ -26,6 +26,8 @@ Treat all concrete runtime assumptions as version-scoped to OpenClaw `2026.6.8` 
 - npm-based verifier workflow testing
 - fixture-driven analyzer validation
 - Markdown report generation
+- operator-style structured logging
+- advisory upstream version-drift checking
 - public discussion without leaking private data
 
 ## Included
@@ -42,7 +44,10 @@ Treat all concrete runtime assumptions as version-scoped to OpenClaw `2026.6.8` 
 - safe issue template
 - read-only session-store analyzer
 - large-file-aware JSONL transcript inspection
+- structured JSONL logger
 - read-only verifier CLI
+- advisory OpenClaw version checker
+- optional GUI wrapper plan
 - Markdown report generator
 - mock, clean, malformed, and bounded large-line fixtures
 - golden expected report metadata for the mock fixture
@@ -57,9 +62,10 @@ Treat all concrete runtime assumptions as version-scoped to OpenClaw `2026.6.8` 
 - machine-specific paths
 - secrets or tokens
 - one-click production repair command
+- hidden automatic runtime updater
 
 ## Maturity
 
-The current repo is documentation-complete and includes a safe read-only verifier, fixture set, automated tests, Markdown report generation, and CI workflow. It is appropriate to present as a `v1.0.0` public engineering artifact.
+The current repo is documentation-complete and includes a safe read-only verifier, fixture set, automated tests, Markdown report generation, structured logging, advisory version checking, and CI workflow. It is appropriate to present as a public engineering artifact.
 
 A future private/local adapter may map a real OpenClaw installation into the same read-only snapshot format without changing source data.
