@@ -2,7 +2,7 @@
 
 ## Current edition
 
-`v0.1.0` is a public documentation edition.
+`v0.2.0` is a public documentation and read-only verification edition.
 
 ## Target runtime
 
@@ -20,6 +20,7 @@ Treat all concrete runtime assumptions as version-scoped to OpenClaw `2026.6.8` 
 - reliability case-study reading
 - incident comparison
 - safe troubleshooting planning
+- mock-based verification
 - public discussion without leaking private data
 
 ## Included
@@ -34,15 +35,19 @@ Treat all concrete runtime assumptions as version-scoped to OpenClaw `2026.6.8` 
 - redaction policy
 - sanitized evidence summary
 - safe issue template
+- read-only session-store analyzer
+- read-only verifier CLI
+- mock session-store fixture
+- GitHub Actions documentation and verifier check
 
 ## Not included
 
 - private transcripts
 - raw local logs
-- one-click runtime repair script
 - machine-specific paths
 - secrets or tokens
+- one-click production repair command
 
 ## Maturity
 
-The current repo is documentation-complete for public review. The next maturity step is a read-only dry-run verifier.
+The current repo is documentation-complete and includes a safe mock-based read-only verifier. The next maturity step is a broader local report generator that still defaults to inspection-only behavior.
