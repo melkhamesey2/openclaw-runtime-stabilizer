@@ -1,18 +1,26 @@
 # Source Directory
 
-The public `src` directory is reserved for future read-only verification tooling.
+The public `src` directory now contains read-only analysis code for synthetic or user-provided session-store snapshots.
 
-## Current status
+## Files
 
-The current public edition is documentation-first. It does not publish a one-click runtime repair script as the default entry point.
+- `session-store-analyzer.mjs` — dependency-free analyzer for session registry and transcript consistency checks.
 
-## Planned direction
+## Safety model
 
-Future source files may include:
+The analyzer is read-only. It does not write, delete, repair, rename, or move files.
 
-- read-only session registry inspector
-- redacted environment reporter
-- transcript-presence checker
-- dashboard/session consistency reporter
+It reports findings such as:
 
-Any future tool should default to dry-run behavior and avoid modifying local runtime state.
+- missing `sessions.json`
+- invalid JSON
+- missing transcript files
+- orphaned-prefixed registry keys
+- duplicate display titles
+- registry key / stored sessionKey mismatch
+- trajectory files without matching base transcripts
+- unreferenced transcript files
+
+## Intended use
+
+Use this code for diagnosis, mock testing, and safe incident comparison. Any future repair workflow should remain separate from read-only inspection and should require explicit review.
