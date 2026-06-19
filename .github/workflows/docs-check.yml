@@ -1,4 +1,4 @@
-name: Documentation and Read-only Verification Check
+name: Documentation, Test, and Read-only Verification Check
 
 on:
   push:
@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   docs-check:
-    name: Validate docs and mock verifier
+    name: Validate docs, tests, fixtures, and read-only tools
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -51,11 +51,23 @@ jobs:
             examples/redacted-environment.example
             examples/mock-session-store/README.md
             examples/mock-session-store/sessions.json
+            examples/mock-session-store/expected-report.json
             examples/mock-session-store/transcripts/clean-session.jsonl
+            examples/mock-session-store/transcripts/unreferenced-extra.jsonl
+            examples/mock-session-store/transcripts/trajectory-only.trajectory.jsonl
+            examples/clean-session-store/sessions.json
+            examples/clean-session-store/transcripts/clean-a.jsonl
+            examples/clean-session-store/transcripts/clean-b.jsonl
+            examples/malformed-session-store/sessions.json
+            examples/malformed-session-store/transcripts/malformed.jsonl
+            examples/mock-large-session-store/sessions.json
+            examples/mock-large-session-store/transcripts/large-line.jsonl
             src/README.md
             src/session-store-analyzer.mjs
             tools/README.md
             tools/verify-readonly.mjs
+            tools/generate-markdown-report.mjs
+            test/session-store-analyzer.test.mjs
             .github/ISSUE_TEMPLATE/safe-incident-report.md
           )
 
@@ -75,6 +87,6 @@ jobs:
         shell: bash
         run: npm install --ignore-scripts
 
-      - name: Run read-only verifier against mock data
+      - name: Run tests, verifier, and report generation
         shell: bash
         run: npm run check
