@@ -4,6 +4,8 @@
 
 Public engineering artifact, reliability case study, and read-only verification toolkit for OpenClaw runtime/session-store incidents.
 
+Current public release: `v1.0.0`.
+
 This repository documents a real stabilization workflow for a local AI agent runtime after session-store inconsistency, dashboard session collisions, orphaned session entries, and runtime/config drift. The public edition focuses on safe diagnosis, reproducible documentation, evidence redaction, rollback discipline, operational verification, mock-based read-only tooling, fixture-driven tests, and Markdown reporting.
 
 ## Target runtime
@@ -218,33 +220,4 @@ The repository includes several safe fixtures:
 │   └── session-store-analyzer.test.mjs
 ├── reports/
 │   └── generated locally by npm run report:mock
-└── .github/
-    ├── workflows/
-    │   └── docs-check.yml
-    └── ISSUE_TEMPLATE/
-        └── safe-incident-report.md
-```
-
-## Current release status
-
-`v0.3.0` is a public documentation, read-only verification, fixture-driven test, and Markdown reporting edition. It is designed for review, learning, incident comparison, safe operational planning, mock-based verification, npm automation, large-file-aware transcript inspection, and reproducible CI checks.
-
-## Safety position
-
-The project is defensive and reliability-focused. It is not a bypass toolkit, exploit project, or destructive patch collection. The default rule is: inspect first, preserve data, verify hashes, and never delete transcripts as a first response.
-
-## Suggested GitHub topics
-
-```text
-openclaw
-local-ai
-ai-agents
-runtime-reliability
-incident-response
-state-repair
-session-store
-rollback-safety
-redaction
-windows
-nodejs
 ```
