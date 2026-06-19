@@ -4,9 +4,9 @@
 
 Public engineering artifact, reliability case study, and read-only verification toolkit for OpenClaw runtime/session-store incidents.
 
-Current public release: `v1.0.0`.
+Current public release: `v1.1.0`.
 
-This repository documents a real stabilization workflow for a local AI agent runtime after session-store inconsistency, dashboard session collisions, orphaned session entries, and runtime/config drift. The public edition focuses on safe diagnosis, reproducible documentation, evidence redaction, rollback discipline, operational verification, mock-based read-only tooling, fixture-driven tests, and Markdown reporting.
+This repository documents a real stabilization workflow for a local AI agent runtime after session-store inconsistency, dashboard session collisions, orphaned session entries, and runtime/config drift. The public edition focuses on safe diagnosis, reproducible documentation, evidence redaction, rollback discipline, operational verification, mock-based read-only tooling, fixture-driven tests, structured logging, advisory version checks, and Markdown reporting.
 
 ## Target runtime
 
@@ -34,6 +34,9 @@ This public edition includes:
 - read-only session-store analyzer
 - mock session-store environments for safe testing
 - fixture-driven Node.js test suite
+- structured JSONL logging for operator runs
+- advisory upstream version check
+- optional GUI wrapper plan
 - Markdown report generation
 - architecture notes for the stabilization approach
 - rollback and verification policy
@@ -76,6 +79,27 @@ node tools/verify-readonly.mjs examples/mock-session-store
 
 The verifier prints a JSON report. It does not write, delete, rename, repair, or mutate source session data.
 
+## Structured logging
+
+Run the verifier with a persistent JSONL log file:
+
+```bash
+npm run verify -- examples/mock-session-store --log-file logs/stabilizer.log
+npm run verify:mock:logged
+```
+
+Each log line includes timestamp, level, message, and structured metadata. This is intended for operator review after a terminal closes or a run fails.
+
+## Advisory version check
+
+Check an upstream OpenClaw repository release without installing or changing anything:
+
+```bash
+npm run version:check -- --repo owner/OpenClaw --current 2026.6.8
+```
+
+The version checker is advisory only. It compares the supplied local version with the latest GitHub release for the supplied repository and never updates OpenClaw.
+
 ## Run tests and full checks
 
 Run the Node.js test suite:
@@ -102,6 +126,8 @@ Current npm scripts:
 | --- | --- |
 | `npm run verify -- <dir>` | Run the verifier on a supplied session-store directory. |
 | `npm run verify:mock` | Run the verifier on the bundled mock fixture. |
+| `npm run verify:mock:logged` | Run mock verification and write `logs/stabilizer.log`. |
+| `npm run version:check -- --repo <owner/name> --current <version>` | Run advisory upstream version drift check. |
 | `npm test` | Run the analyzer test suite. |
 | `npm run report -- <dir> <output.md>` | Generate a Markdown report from a session-store directory. |
 | `npm run report:mock` | Generate `reports/mock-session-store-report.md` from the mock fixture. |
@@ -160,6 +186,10 @@ The repository includes several safe fixtures:
 | `examples/malformed-session-store/` | JSONL parse-error fixture. |
 | `examples/mock-large-session-store/` | Bounded large-line fixture for streaming/line-limit behavior. |
 
+## Optional GUI wrapper
+
+The core project remains CLI-first. A future optional GUI can wrap the existing CLI commands with CustomTkinter without duplicating verifier logic. See [`docs/GUI_WRAPPER_PLAN.md`](docs/GUI_WRAPPER_PLAN.md).
+
 ## Quick reading path
 
 1. [`docs/TARGET_RUNTIME.md`](docs/TARGET_RUNTIME.md)
@@ -167,15 +197,17 @@ The repository includes several safe fixtures:
 3. [`docs/TROUBLESHOOTING_MATRIX.md`](docs/TROUBLESHOOTING_MATRIX.md)
 4. [`examples/mock-session-store/README.md`](examples/mock-session-store/README.md)
 5. [`src/session-store-analyzer.mjs`](src/session-store-analyzer.mjs)
-6. [`tools/verify-readonly.mjs`](tools/verify-readonly.mjs)
-7. [`tools/generate-markdown-report.mjs`](tools/generate-markdown-report.mjs)
-8. [`test/session-store-analyzer.test.mjs`](test/session-store-analyzer.test.mjs)
-9. [`docs/INCIDENT_TIMELINE.md`](docs/INCIDENT_TIMELINE.md)
-10. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
-11. [`docs/OPERATIONAL_VERIFICATION.md`](docs/OPERATIONAL_VERIFICATION.md)
-12. [`docs/ROLLBACK_POLICY.md`](docs/ROLLBACK_POLICY.md)
-13. [`docs/REDACTION_POLICY.md`](docs/REDACTION_POLICY.md)
-14. [`evidence/SANITIZED_EVIDENCE_SUMMARY.md`](evidence/SANITIZED_EVIDENCE_SUMMARY.md)
+6. [`src/logger.mjs`](src/logger.mjs)
+7. [`tools/verify-readonly.mjs`](tools/verify-readonly.mjs)
+8. [`tools/check-openclaw-version.mjs`](tools/check-openclaw-version.mjs)
+9. [`tools/generate-markdown-report.mjs`](tools/generate-markdown-report.mjs)
+10. [`test/session-store-analyzer.test.mjs`](test/session-store-analyzer.test.mjs)
+11. [`docs/INCIDENT_TIMELINE.md`](docs/INCIDENT_TIMELINE.md)
+12. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+13. [`docs/OPERATIONAL_VERIFICATION.md`](docs/OPERATIONAL_VERIFICATION.md)
+14. [`docs/ROLLBACK_POLICY.md`](docs/ROLLBACK_POLICY.md)
+15. [`docs/REDACTION_POLICY.md`](docs/REDACTION_POLICY.md)
+16. [`evidence/SANITIZED_EVIDENCE_SUMMARY.md`](evidence/SANITIZED_EVIDENCE_SUMMARY.md)
 
 ## Repository map
 
@@ -191,6 +223,7 @@ The repository includes several safe fixtures:
 │   ├── ARCHITECTURE.md
 │   ├── EXECUTIVE_SUMMARY.md
 │   ├── FINAL_REPORT_AR.md
+│   ├── GUI_WRAPPER_PLAN.md
 │   ├── INCIDENT_TIMELINE.md
 │   ├── OPERATIONAL_VERIFICATION.md
 │   ├── PROJECT_STATUS.md
@@ -211,10 +244,12 @@ The repository includes several safe fixtures:
 │   └── mock-large-session-store/
 ├── src/
 │   ├── README.md
+│   ├── logger.mjs
 │   └── session-store-analyzer.mjs
 ├── tools/
 │   ├── README.md
 │   ├── verify-readonly.mjs
+│   ├── check-openclaw-version.mjs
 │   └── generate-markdown-report.mjs
 ├── test/
 │   └── session-store-analyzer.test.mjs
