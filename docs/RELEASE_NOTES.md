@@ -1,5 +1,20 @@
 # Release Notes
 
+## v1.1.0 - Operator Logging and Advisory Version Check
+
+### Added
+
+- Added structured JSONL logging through `src/logger.mjs`.
+- Added `--log-file` and `--log-level` support to the read-only verifier CLI.
+- Added `npm run verify:mock:logged` for persistent operator logs.
+- Added advisory upstream OpenClaw version checker through `tools/check-openclaw-version.mjs`.
+- Added `npm run version:check` command.
+- Added optional CustomTkinter GUI wrapper plan in `docs/GUI_WRAPPER_PLAN.md`.
+
+### Safety
+
+This release remains inspection-first. The version checker is advisory only and never installs, updates, patches, or modifies OpenClaw. The GUI plan is documentation only and preserves the CLI read-only contract.
+
 ## v1.0.0 - Complete Public Engineering Artifact
 
 ### Added
