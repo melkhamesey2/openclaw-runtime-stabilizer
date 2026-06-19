@@ -25,11 +25,17 @@
 ├── evidence/
 │   └── SANITIZED_EVIDENCE_SUMMARY.md
 ├── examples/
-│   └── redacted-environment.example
+│   ├── redacted-environment.example
+│   └── mock-session-store/
+│       ├── README.md
+│       ├── sessions.json
+│       └── transcripts/
 ├── src/
-│   └── README.md
+│   ├── README.md
+│   └── session-store-analyzer.mjs
 ├── tools/
-│   └── README.md
+│   ├── README.md
+│   └── verify-readonly.mjs
 └── .github/
     ├── workflows/
     │   └── docs-check.yml
@@ -43,9 +49,19 @@
 2. Target Runtime
 3. Executive Summary
 4. Troubleshooting Matrix
-5. Incident Timeline
-6. Architecture
-7. Operational Verification
-8. Rollback Policy
-9. Redaction Policy
-10. Sanitized Evidence Summary
+5. Mock Session Store
+6. Read-only Verifier
+7. Incident Timeline
+8. Architecture
+9. Operational Verification
+10. Rollback Policy
+11. Redaction Policy
+12. Sanitized Evidence Summary
+
+## Tooling entry points
+
+```bash
+npm install
+npm run verify:mock
+npm run check
+```
