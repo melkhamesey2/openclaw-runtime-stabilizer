@@ -2,7 +2,9 @@
 
 ## Current edition
 
-`v0.3.0` is a public documentation, read-only verification, fixture-driven test, and Markdown reporting edition.
+`v1.0.0` is the first complete public release of the OpenClaw Runtime Stabilizer artifact.
+
+It combines public incident documentation, read-only verification tooling, mock fixtures, automated tests, large-file-aware JSONL inspection, Markdown report generation, npm automation, and CI validation.
 
 ## Target runtime
 
@@ -58,4 +60,6 @@ Treat all concrete runtime assumptions as version-scoped to OpenClaw `2026.6.8` 
 
 ## Maturity
 
-The current repo is documentation-complete and includes a safe read-only verifier, fixture set, automated tests, Markdown report generation, and CI workflow. The next maturity step would be an optional private/local adapter that maps a real OpenClaw installation into the same read-only snapshot format without changing source data.
+The current repo is documentation-complete and includes a safe read-only verifier, fixture set, automated tests, Markdown report generation, and CI workflow. It is appropriate to present as a `v1.0.0` public engineering artifact.
+
+A future private/local adapter may map a real OpenClaw installation into the same read-only snapshot format without changing source data.
