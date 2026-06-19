@@ -1,0 +1,32 @@
+{
+  "agent:main:clean-session": {
+    "sessionKey": "agent:main:clean-session",
+    "title": "Clean Session",
+    "transcriptPath": "transcripts/clean-session.jsonl"
+  },
+  "agent:main:duplicate-title-a": {
+    "sessionKey": "agent:main:duplicate-title-a",
+    "title": "Repeated Dashboard Title",
+    "transcriptPath": "transcripts/duplicate-a.jsonl"
+  },
+  "agent:main:duplicate-title-b": {
+    "sessionKey": "agent:main:duplicate-title-b",
+    "title": "Repeated Dashboard Title",
+    "transcriptPath": "transcripts/duplicate-b.jsonl"
+  },
+  "agent:main:missing-transcript": {
+    "sessionKey": "agent:main:missing-transcript",
+    "title": "Missing Transcript Example",
+    "transcriptPath": "transcripts/missing-transcript.jsonl"
+  },
+  "orphaned:agent:main:legacy-shell": {
+    "sessionKey": "orphaned:agent:main:legacy-shell",
+    "title": "Legacy Orphaned Shell",
+    "transcriptPath": "transcripts/orphaned-shell.jsonl"
+  },
+  "agent:main:alias-case": {
+    "sessionKey": "agent:main:Alias-Case",
+    "title": "Alias Case Drift",
+    "transcriptPath": "transcripts/alias-case.jsonl"
+  }
+}
