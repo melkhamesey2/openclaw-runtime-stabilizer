@@ -1,16 +1,19 @@
 # Source Directory
 
-The public `src` directory now contains read-only analysis code for synthetic or user-provided session-store snapshots.
+The public `src` directory contains read-only analysis and support code for synthetic or user-provided session-store snapshots.
 
 ## Files
 
 - `session-store-analyzer.mjs` — dependency-free analyzer for session registry and transcript consistency checks.
+- `logger.mjs` — structured JSONL logger used by operator-facing CLI commands.
 
 ## Safety model
 
-The analyzer is read-only. It does not write, delete, repair, rename, or move files.
+The analyzer is read-only. It does not write, delete, repair, rename, or move source session data.
 
-It reports findings such as:
+The logger writes only to an explicitly supplied log file path. It records timestamps, severity levels, messages, and structured metadata so an operator can inspect what happened after a terminal closes or a run fails.
+
+The analyzer reports findings such as:
 
 - missing `sessions.json`
 - invalid JSON
