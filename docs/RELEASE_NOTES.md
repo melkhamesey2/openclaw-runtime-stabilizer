@@ -1,5 +1,32 @@
 # Release Notes
 
+## v1.0.0 - Complete Public Engineering Artifact
+
+### Added
+
+- Consolidated the public documentation, read-only verifier, fixtures, tests, report generator, npm automation, and CI workflow into the first complete public release.
+- Marked the package as `1.0.0`.
+- Documented the project as suitable for portfolio review and public technical discussion.
+
+### Included
+
+- OpenClaw `2026.6.8` target runtime note.
+- Public incident case study.
+- Troubleshooting matrix.
+- Read-only session-store analyzer.
+- Large-file-aware JSONL transcript inspection.
+- Verifier CLI.
+- Markdown report generator.
+- Mock, clean, malformed, and bounded large-line fixtures.
+- Golden expected report metadata.
+- Node.js test suite.
+- npm `precheck` / `check` / `postcheck` workflow.
+- GitHub Actions validation.
+
+### Safety
+
+This release remains inspection-first. It does not publish private transcripts, raw local logs, secrets, machine-specific paths, or one-click production repair commands.
+
 ## v0.3.0 - Test Suite and Markdown Reporting
 
 ### Added
