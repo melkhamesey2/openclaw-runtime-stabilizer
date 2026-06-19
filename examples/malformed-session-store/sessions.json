@@ -1,0 +1,7 @@
+{
+  "agent:main:malformed-jsonl": {
+    "sessionKey": "agent:main:malformed-jsonl",
+    "title": "Malformed JSONL Fixture",
+    "transcriptPath": "transcripts/malformed.jsonl"
+  }
+}
