@@ -26,8 +26,18 @@
 │   └── SANITIZED_EVIDENCE_SUMMARY.md
 ├── examples/
 │   ├── redacted-environment.example
-│   └── mock-session-store/
-│       ├── README.md
+│   ├── mock-session-store/
+│   │   ├── README.md
+│   │   ├── sessions.json
+│   │   ├── expected-report.json
+│   │   └── transcripts/
+│   ├── clean-session-store/
+│   │   ├── sessions.json
+│   │   └── transcripts/
+│   ├── malformed-session-store/
+│   │   ├── sessions.json
+│   │   └── transcripts/
+│   └── mock-large-session-store/
 │       ├── sessions.json
 │       └── transcripts/
 ├── src/
@@ -35,7 +45,12 @@
 │   └── session-store-analyzer.mjs
 ├── tools/
 │   ├── README.md
-│   └── verify-readonly.mjs
+│   ├── verify-readonly.mjs
+│   └── generate-markdown-report.mjs
+├── test/
+│   └── session-store-analyzer.test.mjs
+├── reports/
+│   └── generated locally by npm run report:mock
 └── .github/
     ├── workflows/
     │   └── docs-check.yml
@@ -51,17 +66,21 @@
 4. Troubleshooting Matrix
 5. Mock Session Store
 6. Read-only Verifier
-7. Incident Timeline
-8. Architecture
-9. Operational Verification
-10. Rollback Policy
-11. Redaction Policy
-12. Sanitized Evidence Summary
+7. Markdown Report Generator
+8. Analyzer Test Suite
+9. Incident Timeline
+10. Architecture
+11. Operational Verification
+12. Rollback Policy
+13. Redaction Policy
+14. Sanitized Evidence Summary
 
 ## Tooling entry points
 
 ```bash
 npm install
 npm run verify:mock
+npm test
+npm run report:mock
 npm run check
 ```
