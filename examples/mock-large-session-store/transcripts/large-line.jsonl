@@ -1,0 +1,2 @@
+{"role":"user","content":"small line"}
+{"role":"assistant","content":"this line is intentionally long enough to exercise bounded JSONL line validation in tests without storing a large repository fixture"}
