@@ -1,0 +1,2 @@
+{"role":"user","content":"Check key alias drift."}
+{"role":"assistant","content":"Registry key and stored sessionKey differ in casing."}
