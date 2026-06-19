@@ -2,7 +2,7 @@
 
 ## v0.1.0 - Public Documentation Edition
 
-Status: current.
+Status: completed.
 
 Includes:
 
@@ -14,30 +14,42 @@ Includes:
 - sanitized evidence summary
 - safe issue template
 
-## v0.2.0 - Dry-run Verification Toolkit
+## v0.2.0 - Read-only Verification Toolkit
+
+Status: current.
+
+Includes:
+
+- read-only session-store analyzer
+- read-only verifier CLI
+- mock session-store fixture
+- npm scripts for mock verification
+- GitHub Actions check for required files and mock verification
+
+The verifier is inspection-only and does not change files.
+
+## v0.3.0 - Local Report Generator
 
 Planned.
 
 Potential additions:
 
-- read-only environment collector
+- broader environment summary
 - session registry consistency report
 - transcript-presence report
 - dashboard/session mismatch checklist
-- local-only report generation
+- local-only report output
 
-The dry-run toolkit should not modify runtime state.
+## v0.4.0 - Private Operator Workflow Template
 
-## v0.3.0 - Private Repair Workflow Template
-
-Planned as a local/private workflow, not necessarily a public one-click patch.
+Planned as a local/private workflow, not a public one-click command.
 
 Potential additions:
 
 - backup manifest format
 - operator checklist
 - rollback record format
-- controlled repair plan template
+- controlled remediation plan template
 
 ## Non-goals
 
