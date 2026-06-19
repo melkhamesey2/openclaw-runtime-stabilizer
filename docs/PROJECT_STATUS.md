@@ -2,7 +2,7 @@
 
 ## Current edition
 
-`v0.2.1` is a public documentation and read-only verification edition with npm automation and large-file-aware transcript inspection.
+`v0.3.0` is a public documentation, read-only verification, fixture-driven test, and Markdown reporting edition.
 
 ## Target runtime
 
@@ -22,6 +22,8 @@ Treat all concrete runtime assumptions as version-scoped to OpenClaw `2026.6.8` 
 - safe troubleshooting planning
 - mock-based verification
 - npm-based verifier workflow testing
+- fixture-driven analyzer validation
+- Markdown report generation
 - public discussion without leaking private data
 
 ## Included
@@ -39,9 +41,12 @@ Treat all concrete runtime assumptions as version-scoped to OpenClaw `2026.6.8` 
 - read-only session-store analyzer
 - large-file-aware JSONL transcript inspection
 - read-only verifier CLI
-- mock session-store fixture
+- Markdown report generator
+- mock, clean, malformed, and bounded large-line fixtures
+- golden expected report metadata for the mock fixture
+- Node.js test suite
 - npm scripts with precheck/check/postcheck workflow
-- GitHub Actions documentation and verifier check
+- GitHub Actions documentation, test, and verifier check
 
 ## Not included
 
@@ -53,4 +58,4 @@ Treat all concrete runtime assumptions as version-scoped to OpenClaw `2026.6.8` 
 
 ## Maturity
 
-The current repo is documentation-complete and includes a safe mock-based read-only verifier with bounded transcript inspection. The next maturity step is a broader local report generator that still defaults to inspection-only behavior.
+The current repo is documentation-complete and includes a safe read-only verifier, fixture set, automated tests, Markdown report generation, and CI workflow. The next maturity step would be an optional private/local adapter that maps a real OpenClaw installation into the same read-only snapshot format without changing source data.
