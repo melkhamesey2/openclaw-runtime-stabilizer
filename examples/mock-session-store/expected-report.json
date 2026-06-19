@@ -1,0 +1,17 @@
+{
+  "fixture": "mock-session-store",
+  "description": "Stable expectation file for the read-only analyzer. Tests compare finding codes and high-level counts rather than machine-specific paths or hashes.",
+  "expectedFindingCodes": [
+    "DUPLICATE_DISPLAY_TITLE",
+    "MISSING_TRANSCRIPT_FILE",
+    "ORPHANED_SESSION_KEY",
+    "SESSION_KEY_MISMATCH",
+    "TRAJECTORY_WITHOUT_BASE_TRANSCRIPT",
+    "UNREFERENCED_TRANSCRIPT_FILE"
+  ],
+  "minimumSummary": {
+    "registryEntries": 6,
+    "warnings": 2,
+    "findings": 6
+  }
+}
