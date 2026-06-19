@@ -4,7 +4,17 @@
 
 `v0.1.0` is a public documentation edition.
 
-It is suitable for:
+## Target runtime
+
+The documented incident and stabilization workflow were performed against:
+
+```text
+OpenClaw 2026.6.8
+```
+
+Treat all concrete runtime assumptions as version-scoped to OpenClaw `2026.6.8` unless revalidated on another release.
+
+## Suitable for
 
 - portfolio review
 - reliability case-study reading
@@ -15,6 +25,7 @@ It is suitable for:
 ## Included
 
 - README and repository map
+- target runtime/version note
 - executive summary
 - troubleshooting matrix
 - architecture notes
