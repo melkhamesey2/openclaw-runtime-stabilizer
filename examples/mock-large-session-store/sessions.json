@@ -1,0 +1,7 @@
+{
+  "agent:main:large-line": {
+    "sessionKey": "agent:main:large-line",
+    "title": "Large Line Fixture",
+    "transcriptPath": "transcripts/large-line.jsonl"
+  }
+}
