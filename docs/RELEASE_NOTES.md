@@ -1,5 +1,27 @@
 # Release Notes
 
+## v0.3.0 - Test Suite and Markdown Reporting
+
+### Added
+
+- Added fixture-driven Node.js test suite for the session-store analyzer.
+- Added clean, malformed JSONL, and bounded large-line fixtures.
+- Added golden expected report metadata for the mock fixture.
+- Added Markdown report generator.
+- Added `npm test`, `npm run report:mock`, and expanded `npm run check` workflow.
+- Expanded CI to validate required fixtures, tests, and report generation.
+- Added README badge and example output section.
+
+### Improved
+
+- README now documents tests, report generation, fixtures, and the v0.3.0 workflow.
+- Tools documentation now covers verifier and Markdown report usage.
+- Repository map now reflects source, tools, tests, fixtures, reports, and CI.
+
+### Safety
+
+This release remains inspection-first. The analyzer and verifier do not change source session data. The Markdown report generator writes only to the caller-supplied report output path.
+
 ## v0.2.1 - Automation and Large-File Handling
 
 ### Added
