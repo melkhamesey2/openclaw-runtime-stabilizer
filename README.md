@@ -70,11 +70,39 @@ node tools/verify-readonly.mjs examples/mock-session-store
 
 The verifier prints a JSON report. It does not write, delete, rename, repair, or mutate files.
 
-For stricter automation:
+For full project checks:
 
 ```bash
-node tools/verify-readonly.mjs examples/mock-session-store --fail-on-warning
+npm run check
 ```
+
+The `check` workflow uses npm lifecycle hooks:
+
+- `precheck` runs a local self-check.
+- `check` runs the read-only mock verification.
+- `postcheck` repeats the self-check so the automation boundary is explicit.
+
+Current npm scripts:
+
+| Script | Purpose |
+| --- | --- |
+| `npm run verify -- <dir>` | Run the verifier on a supplied session-store directory. |
+| `npm run verify:mock` | Run the verifier on the bundled mock fixture. |
+| `npm run check` | Run the full read-only validation workflow with pre/post hooks. |
+
+## Large-file handling
+
+The analyzer is designed for large JSONL transcript files. It uses streaming file reads for transcript hashing and line-by-line JSONL validation instead of loading entire transcript files into memory.
+
+Useful large-file options:
+
+```bash
+node tools/verify-readonly.mjs examples/mock-session-store --large-file-bytes 1048576
+node tools/verify-readonly.mjs examples/mock-session-store --max-jsonl-line-bytes 1048576
+```
+
+- `--large-file-bytes` controls when the report labels a transcript as large-file mode.
+- `--max-jsonl-line-bytes` bounds deep JSON validation for unusually large single JSONL lines.
 
 ## Quick reading path
 
@@ -138,7 +166,7 @@ node tools/verify-readonly.mjs examples/mock-session-store --fail-on-warning
 
 ## Current release status
 
-`v0.2.0` is a public documentation and read-only verification edition. It is designed for review, learning, incident comparison, safe operational planning, and mock-based verification.
+`v0.2.1` is a public documentation and read-only verification edition. It is designed for review, learning, incident comparison, safe operational planning, mock-based verification, npm automation, and large-file-aware transcript inspection.
 
 ## Safety position
 
