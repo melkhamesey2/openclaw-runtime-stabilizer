@@ -1,6 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import readline from 'node:readline';
+
+const DEFAULT_LARGE_FILE_BYTES = 10 * 1024 * 1024;
+const DEFAULT_MAX_JSONL_LINE_BYTES = 2 * 1024 * 1024;
+const DEFAULT_MAX_REPORTED_PARSE_ERRORS = 20;
 
 function readText(filePath) {
   return fs.readFileSync(filePath, 'utf8');
@@ -14,10 +19,14 @@ function safeJsonParse(text, label) {
   }
 }
 
-function sha256File(filePath) {
-  const hash = crypto.createHash('sha256');
-  hash.update(fs.readFileSync(filePath));
-  return hash.digest('hex');
+async function sha256FileStream(filePath) {
+  return new Promise((resolve, reject) => {
+    const hash = crypto.createHash('sha256');
+    const stream = fs.createReadStream(filePath);
+    stream.on('data', (chunk) => hash.update(chunk));
+    stream.on('error', reject);
+    stream.on('end', () => resolve(hash.digest('hex')));
+  });
 }
 
 function listFilesRecursive(root) {
@@ -31,19 +40,59 @@ function listFilesRecursive(root) {
   return out;
 }
 
-function countJsonlLines(filePath) {
-  const text = readText(filePath).trim();
-  if (!text) return { lines: 0, parseErrors: 0 };
+async function inspectJsonlFile(filePath, options = {}) {
+  const maxLineBytes = options.maxJsonlLineBytes ?? DEFAULT_MAX_JSONL_LINE_BYTES;
+  const maxReportedParseErrors = options.maxReportedParseErrors ?? DEFAULT_MAX_REPORTED_PARSE_ERRORS;
+  const stat = fs.statSync(filePath);
+  const hash = crypto.createHash('sha256');
+  const input = fs.createReadStream(filePath, { encoding: 'utf8' });
+  const rl = readline.createInterface({ input, crlfDelay: Infinity });
+
+  let lines = 0;
+  let blankLines = 0;
   let parseErrors = 0;
-  const lines = text.split(/\r?\n/).filter(Boolean);
-  for (let i = 0; i < lines.length; i += 1) {
+  let oversizedLines = 0;
+  const parseErrorSamples = [];
+
+  input.on('data', (chunk) => hash.update(Buffer.from(chunk, 'utf8')));
+
+  for await (const line of rl) {
+    if (!line.trim()) {
+      blankLines += 1;
+      continue;
+    }
+
+    lines += 1;
+
+    const lineBytes = Buffer.byteLength(line, 'utf8');
+    if (lineBytes > maxLineBytes) {
+      oversizedLines += 1;
+      continue;
+    }
+
     try {
-      JSON.parse(lines[i]);
-    } catch {
+      JSON.parse(line);
+    } catch (error) {
       parseErrors += 1;
+      if (parseErrorSamples.length < maxReportedParseErrors) {
+        parseErrorSamples.push({
+          line: lines,
+          message: error.message,
+        });
+      }
     }
   }
-  return { lines: lines.length, parseErrors };
+
+  return {
+    bytes: stat.size,
+    lines,
+    blankLines,
+    parseErrors,
+    oversizedLines,
+    parseErrorSamples,
+    sha256: hash.digest('hex'),
+    mode: stat.size >= (options.largeFileBytes ?? DEFAULT_LARGE_FILE_BYTES) ? 'streaming-large-file' : 'streaming',
+  };
 }
 
 function normalizeTranscriptPath(root, value) {
@@ -60,7 +109,7 @@ function collectStoreEntries(store) {
   }));
 }
 
-export function analyzeSessionStore(rootDir) {
+export async function analyzeSessionStore(rootDir, options = {}) {
   const root = path.resolve(rootDir);
   const sessionsPath = path.join(root, 'sessions.json');
   const findings = [];
@@ -140,17 +189,19 @@ export function analyzeSessionStore(rootDir) {
           message: 'Registry points to a transcript file that does not exist.',
         });
       } else {
-        const stat = fs.statSync(transcriptPath);
-        const lineInfo = countJsonlLines(transcriptPath);
+        const lineInfo = await inspectJsonlFile(transcriptPath, options);
         transcriptStats.push({
           key,
           transcriptPath: path.relative(root, transcriptPath),
-          bytes: stat.size,
+          bytes: lineInfo.bytes,
           lines: lineInfo.lines,
+          blankLines: lineInfo.blankLines,
           parseErrors: lineInfo.parseErrors,
-          sha256: sha256File(transcriptPath),
+          oversizedLines: lineInfo.oversizedLines,
+          sha256: lineInfo.sha256,
+          mode: lineInfo.mode,
         });
-        if (stat.size <= 8 || lineInfo.lines === 0) {
+        if (lineInfo.bytes <= 8 || lineInfo.lines === 0) {
           findings.push({
             severity: 'warning',
             code: 'EMPTY_OR_TINY_TRANSCRIPT',
@@ -166,7 +217,18 @@ export function analyzeSessionStore(rootDir) {
             key,
             transcriptPath: path.relative(root, transcriptPath),
             parseErrors: lineInfo.parseErrors,
+            parseErrorSamples: lineInfo.parseErrorSamples,
             message: 'Transcript contains JSONL lines that do not parse cleanly.',
+          });
+        }
+        if (lineInfo.oversizedLines > 0) {
+          findings.push({
+            severity: 'info',
+            code: 'OVERSIZED_JSONL_LINES_SKIPPED',
+            key,
+            transcriptPath: path.relative(root, transcriptPath),
+            oversizedLines: lineInfo.oversizedLines,
+            message: 'One or more very large JSONL lines were skipped for bounded validation.',
           });
         }
       }
@@ -198,6 +260,7 @@ export function analyzeSessionStore(rootDir) {
         severity: 'info',
         code: 'UNREFERENCED_TRANSCRIPT_FILE',
         transcriptPath: path.relative(root, file),
+        sha256: await sha256FileStream(file),
         message: 'Transcript exists on disk but is not referenced by sessions.json.',
       });
     }
@@ -210,6 +273,7 @@ export function analyzeSessionStore(rootDir) {
         severity: 'info',
         code: 'TRAJECTORY_WITHOUT_BASE_TRANSCRIPT',
         trajectoryPath: path.relative(root, file),
+        sha256: await sha256FileStream(file),
         message: 'Trajectory file exists without a matching base transcript file.',
       });
     }
@@ -230,6 +294,8 @@ export function analyzeSessionStore(rootDir) {
       errors: errorCount,
       warnings: warningCount,
       findings: findings.length,
+      largeFileThresholdBytes: options.largeFileBytes ?? DEFAULT_LARGE_FILE_BYTES,
+      maxJsonlLineBytes: options.maxJsonlLineBytes ?? DEFAULT_MAX_JSONL_LINE_BYTES,
     },
     transcriptStats,
     findings,
