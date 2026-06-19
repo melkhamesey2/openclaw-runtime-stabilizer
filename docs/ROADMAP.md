@@ -1,51 +1,38 @@
 # Roadmap
 
-## v0.1.0 - Public Documentation Edition
+## v1.0.0 - Complete Public Engineering Artifact
 
-Status: completed.
+Status: current.
 
 Includes:
 
 - public-safe incident documentation
+- OpenClaw `2026.6.8` target runtime note
 - troubleshooting matrix
 - rollback policy
 - operational verification checklist
 - redaction policy
 - sanitized evidence summary
 - safe issue template
-
-## v0.2.0 - Read-only Verification Toolkit
-
-Status: current.
-
-Includes:
-
 - read-only session-store analyzer
+- large-file-aware JSONL transcript inspection
 - read-only verifier CLI
-- mock session-store fixture
-- npm scripts for mock verification
-- GitHub Actions check for required files and mock verification
+- Markdown report generator
+- mock, clean, malformed, and bounded large-line fixtures
+- golden expected report metadata
+- fixture-driven Node.js test suite
+- npm precheck/check/postcheck automation
+- GitHub Actions validation
 
-The verifier is inspection-only and does not change files.
+The public v1 line is inspection-first and does not publish private transcripts, raw logs, secrets, machine-specific paths, or one-click production repair commands.
 
-## v0.3.0 - Local Report Generator
+## Future - Private Local Adapter
 
-Planned.
-
-Potential additions:
-
-- broader environment summary
-- session registry consistency report
-- transcript-presence report
-- dashboard/session mismatch checklist
-- local-only report output
-
-## v0.4.0 - Private Operator Workflow Template
-
-Planned as a local/private workflow, not a public one-click command.
+Planned as a private/local workflow, not a public one-click command.
 
 Potential additions:
 
+- local snapshot adapter for a real OpenClaw installation
 - backup manifest format
 - operator checklist
 - rollback record format
