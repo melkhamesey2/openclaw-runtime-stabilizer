@@ -1,0 +1,12 @@
+{
+  "agent:main:clean-a": {
+    "sessionKey": "agent:main:clean-a",
+    "title": "Clean A",
+    "transcriptPath": "transcripts/clean-a.jsonl"
+  },
+  "agent:main:clean-b": {
+    "sessionKey": "agent:main:clean-b",
+    "title": "Clean B",
+    "transcriptPath": "transcripts/clean-b.jsonl"
+  }
+}
