@@ -1,6 +1,6 @@
 {
   "name": "openclaw-runtime-stabilizer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Public reliability case study and read-only verifier for OpenClaw local AI agent runtime stabilization.",
   "type": "module",
   "private": false,
@@ -17,8 +17,10 @@
   "scripts": {
     "verify": "node tools/verify-readonly.mjs",
     "verify:mock": "npm run verify -- examples/mock-session-store",
+    "verify:mock:logged": "npm run verify -- examples/mock-session-store --log-file logs/stabilizer.log",
     "report": "node tools/generate-markdown-report.mjs",
     "report:mock": "npm run report -- examples/mock-session-store reports/mock-session-store-report.md",
+    "version:check": "node tools/check-openclaw-version.mjs",
     "test": "node --test",
     "precheck": "node tools/verify-readonly.mjs --self-check",
     "check": "npm test && npm run verify:mock && npm run report:mock",
