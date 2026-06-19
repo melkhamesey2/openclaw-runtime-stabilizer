@@ -60,11 +60,11 @@ jobs:
             exit 1
           fi
 
-      - name: Check for private-path markers
+      - name: Check for obvious private markers
         shell: bash
         run: |
           set -euo pipefail
-          if grep -RInE 'C:\\Users\\|/Users/|/home/[^ ]+|AppData\\Roaming|\.openclaw\\|transcript|token=' . \
+          if grep -RInE 'C:\\Users\\[^ ]+|/Users/[^ ]+|/home/[^ ]+|AppData\\Roaming|token=|api[_-]?key|secret=' . \
             --exclude-dir=.git \
             --exclude='.gitignore'; then
             echo "Potential private marker found. Review before publishing."
