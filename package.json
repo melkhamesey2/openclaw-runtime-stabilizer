@@ -1,0 +1,31 @@
+{
+  "name": "openclaw-runtime-stabilizer",
+  "version": "0.1.0",
+  "description": "Public reliability case study for OpenClaw local AI agent runtime stabilization.",
+  "type": "module",
+  "private": false,
+  "license": "Apache-2.0",
+  "author": "Moustafa Elkhamesey",
+  "homepage": "https://github.com/melkhamesey2/openclaw-runtime-stabilizer#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/melkhamesey2/openclaw-runtime-stabilizer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/melkhamesey2/openclaw-runtime-stabilizer/issues"
+  },
+  "keywords": [
+    "openclaw",
+    "local-ai",
+    "ai-agents",
+    "runtime-reliability",
+    "incident-response",
+    "state-repair",
+    "session-store",
+    "rollback-safety",
+    "redaction"
+  ],
+  "engines": {
+    "node": ">=20"
+  }
+}
