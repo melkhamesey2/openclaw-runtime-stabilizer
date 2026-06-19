@@ -1,4 +1,4 @@
-name: Documentation Check
+name: Documentation and Read-only Verification Check
 
 on:
   push:
@@ -12,11 +12,16 @@ permissions:
 
 jobs:
   docs-check:
-    name: Validate public documentation
+    name: Validate docs and mock verifier
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
       - name: Check required files
         shell: bash
@@ -29,6 +34,7 @@ jobs:
             NOTICE
             LICENSE
             package.json
+            docs/TARGET_RUNTIME.md
             docs/EXECUTIVE_SUMMARY.md
             docs/TROUBLESHOOTING_MATRIX.md
             docs/ARCHITECTURE.md
@@ -43,8 +49,13 @@ jobs:
             docs/FINAL_REPORT_AR.md
             evidence/SANITIZED_EVIDENCE_SUMMARY.md
             examples/redacted-environment.example
+            examples/mock-session-store/README.md
+            examples/mock-session-store/sessions.json
+            examples/mock-session-store/transcripts/clean-session.jsonl
             src/README.md
+            src/session-store-analyzer.mjs
             tools/README.md
+            tools/verify-readonly.mjs
             .github/ISSUE_TEMPLATE/safe-incident-report.md
           )
 
@@ -60,14 +71,10 @@ jobs:
             exit 1
           fi
 
-      - name: Check for obvious private markers
+      - name: Install project metadata
         shell: bash
-        run: |
-          set -euo pipefail
-          if grep -RInE 'C:\\Users\\[^ ]+|/Users/[^ ]+|/home/[^ ]+|AppData\\Roaming|token=|api[_-]?key|secret=' . \
-            --exclude-dir=.git \
-            --exclude='.gitignore'; then
-            echo "Potential private marker found. Review before publishing."
-            exit 1
-          fi
-          echo "No obvious private markers found."
+        run: npm install --ignore-scripts
+
+      - name: Run read-only verifier against mock data
+        shell: bash
+        run: npm run check
