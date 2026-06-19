@@ -1,8 +1,10 @@
 # OpenClaw Runtime Stabilizer
 
+![Documentation, Test, and Read-only Verification Check](https://github.com/melkhamesey2/openclaw-runtime-stabilizer/actions/workflows/docs-check.yml/badge.svg)
+
 Public engineering artifact, reliability case study, and read-only verification toolkit for OpenClaw runtime/session-store incidents.
 
-This repository documents a real stabilization workflow for a local AI agent runtime after session-store inconsistency, dashboard session collisions, orphaned session entries, and runtime/config drift. The public edition focuses on safe diagnosis, reproducible documentation, evidence redaction, rollback discipline, operational verification, and mock-based read-only tooling.
+This repository documents a real stabilization workflow for a local AI agent runtime after session-store inconsistency, dashboard session collisions, orphaned session entries, and runtime/config drift. The public edition focuses on safe diagnosis, reproducible documentation, evidence redaction, rollback discipline, operational verification, mock-based read-only tooling, fixture-driven tests, and Markdown reporting.
 
 ## Target runtime
 
@@ -28,7 +30,9 @@ This public edition includes:
 - target runtime/version note
 - troubleshooting matrix for similar symptoms
 - read-only session-store analyzer
-- mock session-store environment for safe testing
+- mock session-store environments for safe testing
+- fixture-driven Node.js test suite
+- Markdown report generation
 - architecture notes for the stabilization approach
 - rollback and verification policy
 - redaction policy for public release
@@ -56,7 +60,7 @@ There are currently no external runtime dependencies. `npm install` is still use
 
 ## Run the read-only verifier
 
-Run against the bundled safe mock dataset:
+Run against the bundled mock dataset:
 
 ```bash
 npm run verify:mock
@@ -68,9 +72,17 @@ Equivalent direct command:
 node tools/verify-readonly.mjs examples/mock-session-store
 ```
 
-The verifier prints a JSON report. It does not write, delete, rename, repair, or mutate files.
+The verifier prints a JSON report. It does not write, delete, rename, repair, or mutate source session data.
 
-For full project checks:
+## Run tests and full checks
+
+Run the Node.js test suite:
+
+```bash
+npm test
+```
+
+Run the full project check:
 
 ```bash
 npm run check
@@ -79,7 +91,7 @@ npm run check
 The `check` workflow uses npm lifecycle hooks:
 
 - `precheck` runs a local self-check.
-- `check` runs the read-only mock verification.
+- `check` runs tests, mock verification, and Markdown report generation.
 - `postcheck` repeats the self-check so the automation boundary is explicit.
 
 Current npm scripts:
@@ -88,7 +100,10 @@ Current npm scripts:
 | --- | --- |
 | `npm run verify -- <dir>` | Run the verifier on a supplied session-store directory. |
 | `npm run verify:mock` | Run the verifier on the bundled mock fixture. |
-| `npm run check` | Run the full read-only validation workflow with pre/post hooks. |
+| `npm test` | Run the analyzer test suite. |
+| `npm run report -- <dir> <output.md>` | Generate a Markdown report from a session-store directory. |
+| `npm run report:mock` | Generate `reports/mock-session-store-report.md` from the mock fixture. |
+| `npm run check` | Run self-checks, tests, mock verification, and report generation. |
 
 ## Large-file handling
 
@@ -104,6 +119,45 @@ node tools/verify-readonly.mjs examples/mock-session-store --max-jsonl-line-byte
 - `--large-file-bytes` controls when the report labels a transcript as large-file mode.
 - `--max-jsonl-line-bytes` bounds deep JSON validation for unusually large single JSONL lines.
 
+## Example verifier output
+
+A shortened mock finding looks like this:
+
+```json
+{
+  "ok": true,
+  "summary": {
+    "registryEntries": 6,
+    "warnings": 2,
+    "findings": 6
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "code": "MISSING_TRANSCRIPT_FILE",
+      "message": "Registry points to a transcript file that does not exist."
+    }
+  ]
+}
+```
+
+For a human-readable version, run:
+
+```bash
+npm run report:mock
+```
+
+## Fixtures
+
+The repository includes several safe fixtures:
+
+| Fixture | Purpose |
+| --- | --- |
+| `examples/mock-session-store/` | Mixed incident-like registry for golden expectations. |
+| `examples/clean-session-store/` | Clean registry used to verify zero findings. |
+| `examples/malformed-session-store/` | JSONL parse-error fixture. |
+| `examples/mock-large-session-store/` | Bounded large-line fixture for streaming/line-limit behavior. |
+
 ## Quick reading path
 
 1. [`docs/TARGET_RUNTIME.md`](docs/TARGET_RUNTIME.md)
@@ -112,12 +166,14 @@ node tools/verify-readonly.mjs examples/mock-session-store --max-jsonl-line-byte
 4. [`examples/mock-session-store/README.md`](examples/mock-session-store/README.md)
 5. [`src/session-store-analyzer.mjs`](src/session-store-analyzer.mjs)
 6. [`tools/verify-readonly.mjs`](tools/verify-readonly.mjs)
-7. [`docs/INCIDENT_TIMELINE.md`](docs/INCIDENT_TIMELINE.md)
-8. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
-9. [`docs/OPERATIONAL_VERIFICATION.md`](docs/OPERATIONAL_VERIFICATION.md)
-10. [`docs/ROLLBACK_POLICY.md`](docs/ROLLBACK_POLICY.md)
-11. [`docs/REDACTION_POLICY.md`](docs/REDACTION_POLICY.md)
-12. [`evidence/SANITIZED_EVIDENCE_SUMMARY.md`](evidence/SANITIZED_EVIDENCE_SUMMARY.md)
+7. [`tools/generate-markdown-report.mjs`](tools/generate-markdown-report.mjs)
+8. [`test/session-store-analyzer.test.mjs`](test/session-store-analyzer.test.mjs)
+9. [`docs/INCIDENT_TIMELINE.md`](docs/INCIDENT_TIMELINE.md)
+10. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+11. [`docs/OPERATIONAL_VERIFICATION.md`](docs/OPERATIONAL_VERIFICATION.md)
+12. [`docs/ROLLBACK_POLICY.md`](docs/ROLLBACK_POLICY.md)
+13. [`docs/REDACTION_POLICY.md`](docs/REDACTION_POLICY.md)
+14. [`evidence/SANITIZED_EVIDENCE_SUMMARY.md`](evidence/SANITIZED_EVIDENCE_SUMMARY.md)
 
 ## Repository map
 
@@ -147,16 +203,21 @@ node tools/verify-readonly.mjs examples/mock-session-store --max-jsonl-line-byte
 │   └── SANITIZED_EVIDENCE_SUMMARY.md
 ├── examples/
 │   ├── redacted-environment.example
-│   └── mock-session-store/
-│       ├── README.md
-│       ├── sessions.json
-│       └── transcripts/
+│   ├── mock-session-store/
+│   ├── clean-session-store/
+│   ├── malformed-session-store/
+│   └── mock-large-session-store/
 ├── src/
 │   ├── README.md
 │   └── session-store-analyzer.mjs
 ├── tools/
 │   ├── README.md
-│   └── verify-readonly.mjs
+│   ├── verify-readonly.mjs
+│   └── generate-markdown-report.mjs
+├── test/
+│   └── session-store-analyzer.test.mjs
+├── reports/
+│   └── generated locally by npm run report:mock
 └── .github/
     ├── workflows/
     │   └── docs-check.yml
@@ -166,7 +227,7 @@ node tools/verify-readonly.mjs examples/mock-session-store --max-jsonl-line-byte
 
 ## Current release status
 
-`v0.2.1` is a public documentation and read-only verification edition. It is designed for review, learning, incident comparison, safe operational planning, mock-based verification, npm automation, and large-file-aware transcript inspection.
+`v0.3.0` is a public documentation, read-only verification, fixture-driven test, and Markdown reporting edition. It is designed for review, learning, incident comparison, safe operational planning, mock-based verification, npm automation, large-file-aware transcript inspection, and reproducible CI checks.
 
 ## Safety position
 
