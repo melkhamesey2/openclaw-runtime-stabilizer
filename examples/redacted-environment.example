@@ -1,0 +1,21 @@
+# Redacted environment example
+
+This file shows how to document an incident environment without exposing private data.
+
+```text
+Application: OpenClaw
+Version: <VERSION>
+Operating system: Windows
+Runtime: Node.js <VERSION>
+Install type: local
+Config path: <OPENCLAW_CONFIG>
+Session registry: <SESSION_REGISTRY>
+Transcript root: <TRANSCRIPT_ROOT>
+Backup root: <BACKUP_ROOT>
+Host: <HOSTNAME_REDACTED>
+User: <USER_REDACTED>
+```
+
+## Notes
+
+Replace real values with placeholders before sharing publicly.
