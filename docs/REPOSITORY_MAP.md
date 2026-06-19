@@ -20,6 +20,7 @@
 │   ├── REPOSITORY_MAP.md
 │   ├── ROADMAP.md
 │   ├── ROLLBACK_POLICY.md
+│   ├── TARGET_RUNTIME.md
 │   └── TROUBLESHOOTING_MATRIX.md
 ├── evidence/
 │   └── SANITIZED_EVIDENCE_SUMMARY.md
@@ -30,6 +31,8 @@
 ├── tools/
 │   └── README.md
 └── .github/
+    ├── workflows/
+    │   └── docs-check.yml
     └── ISSUE_TEMPLATE/
         └── safe-incident-report.md
 ```
@@ -37,11 +40,12 @@
 ## Reading order
 
 1. README
-2. Executive Summary
-3. Troubleshooting Matrix
-4. Incident Timeline
-5. Architecture
-6. Operational Verification
-7. Rollback Policy
-8. Redaction Policy
-9. Sanitized Evidence Summary
+2. Target Runtime
+3. Executive Summary
+4. Troubleshooting Matrix
+5. Incident Timeline
+6. Architecture
+7. Operational Verification
+8. Rollback Policy
+9. Redaction Policy
+10. Sanitized Evidence Summary
