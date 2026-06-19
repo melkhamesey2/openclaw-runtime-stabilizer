@@ -42,6 +42,7 @@ jobs:
             docs/OPERATIONAL_VERIFICATION.md
             docs/REDACTION_POLICY.md
             docs/ROADMAP.md
+            docs/GUI_WRAPPER_PLAN.md
             docs/INCIDENT_TIMELINE.md
             docs/PROJECT_STATUS.md
             docs/RELEASE_NOTES.md
@@ -63,9 +64,11 @@ jobs:
             examples/mock-large-session-store/sessions.json
             examples/mock-large-session-store/transcripts/large-line.jsonl
             src/README.md
+            src/logger.mjs
             src/session-store-analyzer.mjs
             tools/README.md
             tools/verify-readonly.mjs
+            tools/check-openclaw-version.mjs
             tools/generate-markdown-report.mjs
             test/session-store-analyzer.test.mjs
             .github/ISSUE_TEMPLATE/safe-incident-report.md
